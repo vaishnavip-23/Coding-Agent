@@ -46,6 +46,6 @@ def main():
         print("Prompt tokens:",response.usage_metadata.prompt_token_count)
         print("Response tokens:",response.usage_metadata.candidates_token_count)
 
-print(get_files_info("calculator"))
+# print(get_files_info("functions"))
 
-# main()
+main()
