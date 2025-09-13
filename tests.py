@@ -1,18 +1,9 @@
-from functions.get_files_info import get_files_info
+# from functions.get_files_info import get_files_info
+# from functions.get_files_content import get_files_content
+from functions.write_file import write_file
 
 def main():
     working_directory="calculator"
-
-    root_contents=get_files_info(working_directory)
-    print(root_contents)
-
-    pkg_contents=get_files_info(working_directory, "pkg")
-    print(pkg_contents)
-
-    pkg_contents=get_files_info(working_directory, "/bin")
-    print(pkg_contents)
-
-    pkg_contents=get_files_info(working_directory, "../")
-    print(pkg_contents)
+    print(write_file(working_directory, "", "Hello, World!"))
 
 main()
