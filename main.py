@@ -7,6 +7,7 @@ from functions.get_files_info import schema_get_files_info
 from functions.get_files_content import schema_get_files_content
 from functions.write_file import schema_write_file
 from functions.run_python_file import schema_run_python_file
+from functions.structured import schema_plan
 from call_function import call_function
 
 
@@ -28,6 +29,8 @@ def main():
     - Run a Python file with optional arguments
 
     All paths you provide should be relative to the working directory. You do not need to specify the working directory in your function calls as it is automatically injected for security reasons.
+    If structured output is requested, return JSON with: goal, steps[{action, reason}], tool_calls[{tool, params_json}].
+    Note: Structured JSON mode does not use tools; provide a plan only.
     """
 
     # sys.argv variable is a list of strings representing the command-line arguments passed to the script. First element is the script name, rest are the arguments passed to the script.
@@ -35,10 +38,11 @@ def main():
     if len(sys.argv)<2:
         print("I didn't receieve a prompt!")
         sys.exit(1)
-    verbose_flag=False
-    if(len(sys.argv)==3 and sys.argv[2]=='-v'):
-        verbose_flag=True
+
     prompt=sys.argv[1]
+    flags = set(sys.argv[2:])
+    verbose_flag = ("-v" in flags) or ("--verbose" in flags)
+    structured_flag = ("--structured" in flags)
 
     messages=[
         types.Content(
@@ -48,6 +52,21 @@ def main():
             ]
         )
     ]
+
+    # If structured, make a single JSON response call without tools
+    if structured_flag:
+        config=types.GenerateContentConfig(
+            system_instruction=system_prompt,
+            response_mime_type="application/json",
+            response_schema=schema_plan(),
+        )
+        response = client.models.generate_content(
+            model="gemini-2.5-flash",
+            contents=messages,
+            config=config,
+        )
+        print(response.text)
+        return
 
     available_functions = types.Tool(
     function_declarations=[
@@ -61,9 +80,9 @@ def main():
     for i in range(0,max_iters):
 
         config=types.GenerateContentConfig(
-        tools=[available_functions], system_instruction=system_prompt
+            tools=[available_functions],
+            system_instruction=system_prompt,
         )
-
 
         response = client.models.generate_content(
             model="gemini-2.5-flash",
