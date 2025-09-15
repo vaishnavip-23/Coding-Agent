@@ -1,4 +1,5 @@
 import os
+from config import MAX_WRITE_CHARS
 from google.genai import types
 
 
@@ -15,6 +16,8 @@ def write_file(working_directory, file_path, content):
         except Exception as e:
             return f"Could not create create directory:{parent_dir}, error:{e}"
     try:
+        if len(content) > MAX_WRITE_CHARS:
+            return f"Error: content exceeds MAX_WRITE_CHARS ({MAX_WRITE_CHARS})."
         with open(abs_file_path, 'w') as file:
             file.write(content)
         return f'File "{file_path}" ({len(content)}) written successfully'
