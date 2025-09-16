@@ -48,7 +48,7 @@ def get_recent_context():
         recent_context = ""
     return recent_context
 
-def process_prompt(client, prompt, verbose_flag=False, structured_flag=False): # line 175
+def process_prompt(client, prompt, verbose_flag=False, structured_flag=False): # line 230
     """Process a single prompt and return the response"""
     system_prompt = """
     You are a helpful AI coding agent. Your name is CodeGen.
