@@ -1,7 +1,8 @@
 from functions.get_files_info import get_files_info
-from functions.get_files_content import get_files_content
-from functions.write_file import write_file
-from functions.run_python_file import run_python_file
+from functions.read import read
+from functions.write import write
+from functions.run_python import run_python
+from functions.delete import delete
 from functions.search_memory import search_memory
 from google.genai import types
 
@@ -18,12 +19,14 @@ def call_function(function_call_part, verbose=False):
     result=""
     if function_call_part.name == "get_files_info":
         result = get_files_info(working_directory,**function_call_part.args)
-    if function_call_part.name == "get_files_content":
-        result = get_files_content(working_directory,**function_call_part.args)
-    if function_call_part.name == "write_file":
-        result = write_file(working_directory,**function_call_part.args)
-    if function_call_part.name == "run_python_file":
-        result = run_python_file(working_directory,**function_call_part.args)
+    if function_call_part.name == "read":
+        result = read(working_directory,**function_call_part.args)
+    if function_call_part.name == "write":
+        result = write(working_directory,**function_call_part.args)
+    if function_call_part.name == "run_python":
+        result = run_python(working_directory,**function_call_part.args)
+    if function_call_part.name == "delete":
+        result = delete(working_directory,**function_call_part.args)
     if function_call_part.name == "search_memory":
         result = search_memory(**function_call_part.args)
     if result=="":
