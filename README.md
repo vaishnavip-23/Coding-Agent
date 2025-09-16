@@ -159,7 +159,7 @@ uv run main.py "create fizzbuzz.py and run it"
 uv run main.py "create a web scraper" --structured
 ```
 
-## Roadmap / Improvements
+## Improvements
 
 - Replace JSON file memory with a vector database (e.g., Chroma, Qdrant) for semantic retrieval
 - Support Postgres for durable, queryable memory storage
